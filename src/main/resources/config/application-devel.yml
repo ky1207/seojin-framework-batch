@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    include: devel-app, devel-db
+         
+logging:
+  config: classpath:log/logback_devel.xml

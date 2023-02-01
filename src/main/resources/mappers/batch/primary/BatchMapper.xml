@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seojin.batch.biz.batch.mapper.BatchMapper">
+
+	<update id="updateJobExecutionId" parameterType="Long">
+		/*+ com.seojin.batch.biz.batch.mapper.BatchMapper.updateJobExecutionId / */
+	
+		UPDATE QRTZ_TRIGGERS_EXECUTION_EXT
+		   SET JOB_EXECUTION_ID 		= #{jobExecutionId,			jdbcType=BIGINT}
+		 WHERE TRIGGERS_EXECUTION_ID 	= #{triggersExecutionId,	jdbcType=BIGINT}
+		 
+	</update>
+
+</mapper>

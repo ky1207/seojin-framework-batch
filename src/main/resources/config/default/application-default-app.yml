@@ -1,0 +1,10 @@
+log:
+  file:
+    appender:
+      maxHistory: 10
+  path: /data/batch/log
+
+
+security:
+  access:
+    ip: 127.0.0.1,0:0:0:0:0:0:0:1

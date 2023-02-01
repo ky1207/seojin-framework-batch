@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    include: prod-app, prod-db
+           
+logging:
+  config: classpath:log/logback_prod.xml

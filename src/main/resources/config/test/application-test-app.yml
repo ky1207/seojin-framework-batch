@@ -1,0 +1,5 @@
+log:
+  file:
+    appender:
+      maxHistory: 10
+  path: /data/batch/local/log

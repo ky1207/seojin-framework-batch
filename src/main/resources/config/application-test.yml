@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    include: test-app, test-db
+
+logging:
+  config: classpath:log/logback_test.xml

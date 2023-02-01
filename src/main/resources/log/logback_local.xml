@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration debug="false" scan="false">
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+  <springProperty scope="context" name="PATH" source="log.path" />
+  <springProperty scope="context" name="MAXHISTORY" source="log.file.appender.maxHistory" />
+
+<!--
+ 	<appender name="FILEOUT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${PATH}/local_log_batch.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${PATH}/local_log_batch.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+			<maxFileSize>200MB</maxFileSize>
+			<maxHistory>${MAXHISTORY}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>${FILE_LOG_PATTERN}</pattern>
+			<pattern>Logback %d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %X{dd.trace_id} %X{dd.span_id} - %m%n</pattern>
+		</encoder>
+	</appender>
+-->
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+           <evaluator>
+               <expression>return message.contains("NOT_SQL_LOG");</expression>
+           </evaluator>
+           <OnMismatch>NEUTRAL</OnMismatch>
+           <OnMatch>DENY</OnMatch>
+     	</filter>
+	</appender>
+
+	<!--    <logger name="org.apache.http" level="warn" />
+	<logger name="org.apache.catalina" level="error" />
+	<logger name="org.apache.tomcat" level="error" />
+	<logger name="org.springframework.transaction" level="debug" />
+	<logger name="org.springframework.jdbc" level="debug" />
+	<logger name="org.springframework.beans" level="warn" />
+	<logger name="org.springframework.context" level="warn" />
+	<logger name="org.springframework.web" level="TRACE" />
+	<logger name="org.mybatis.spring" level="warn" />
+	<logger name="org.mybatis.spring.transaction" level="debug"/>
+    <logger name="org.springframework.jdbc.datasource" level="debug" />
+	-->
+
+	<logger name="com.seojin" level="debug" />
+	<logger name="org.quartz" level="debug" />
+
+	<!-- <logger name="com.zaxxer.hikari" level="debug" /> -->
+	<!--  SQL 쿼리 문장만 로그로 남긴다. PreparedStatement일 경우 관련된 argument 값으로 대체된 SQL문이 보여진다.  -->
+    <!-- <logger name="jdbc.sqlonly" level="DEBUG" /> -->
+    <!--  SQL문과 해당 SQL을 실행시키는데 수행된 시간 정보(milliseconds)를 포함한다. -->
+    <!-- <logger name="jdbc.sqltiming" level="debug"/> -->
+	<!-- SQL 결과 조회된 데이터의 table을 로그로 남긴다 -->
+	<!-- <logger name="jdbc.resultsettable" level="debug" /> -->
+	<!-- ResultSet을 포함한 모든 JDBC 호출 정보 -->
+	<!-- <logger name="jdbc.resultset" level="info"/> -->
+	<!-- <logger name="jdbc.connection" level="info" /> -->
+
+	<root level="warn">
+		<appender-ref ref="STDOUT" />
+		<!-- <appender-ref ref="FILEOUT"/> -->
+	</root>
+
+</configuration>

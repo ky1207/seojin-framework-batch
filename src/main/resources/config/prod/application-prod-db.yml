@@ -1,0 +1,9 @@
+datasource:
+  primary:
+    connection-timeout: 30000
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initializationFailTimeout: 0
+    jdbcUrl:  jdbc:log4jdbc:mariadb://seojin-dev-setos-db-00.ctsmdpvbvpot.ap-northeast-2.rds.amazonaws.com:3816/TEST_INFO
+    maximum-pool-size: 5
+    minimum-idle: 3
+    connection-test-query: 
