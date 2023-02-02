@@ -1,6 +1,5 @@
 package com.seojin.batch.sys.listener;
 
-import com.seojin.batch.biz.scheduler.TriggerExecution;
 import org.quartz.JobExecutionContext;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
