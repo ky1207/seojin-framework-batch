@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seojin.batch.biz.scheduler.mapper.SchedulerMapper">
+
+
+	<select id="selectScheduleListCount" resultType="int">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.selectScheduleListCount */
+
+		SELECT COUNT(*)
+		FROM QRTZ_JOB_DETAILS QJD
+		JOIN QRTZ_JOB_DETAILS_EXT QJDE
+		ON ( QJD.SCHED_NAME = QJDE.SCHED_NAME AND QJD.JOB_NAME = QJDE.JOB_NAME AND QJD.JOB_GROUP = QJDE.JOB_GROUP)
+		JOIN QRTZ_TRIGGERS QT
+		ON ( QJD.SCHED_NAME = QT.SCHED_NAME AND QJD.JOB_NAME = QT.JOB_NAME AND QJD.JOB_GROUP = QT.JOB_GROUP )
+		JOIN QRTZ_CRON_TRIGGERS QCT
+		ON ( QT.SCHED_NAME = QCT.SCHED_NAME AND QT.TRIGGER_NAME = QCT.TRIGGER_NAME AND QT.TRIGGER_GROUP = QCT.TRIGGER_GROUP )
+		<where>
+			<if test="jobGroup != null and jobGroup != ''">
+				AND QJD.JOB_GROUP = #{jobGroup, jdbcType=VARCHAR}
+			</if>
+			<if test="jobName != null and jobName != ''">
+				AND QJD.JOB_NAME LIKE CONCAT('%', #{jobName, jdbcType=VARCHAR}, '%')
+			</if>
+		</where>
+
+	</select>
+
+	<select id="selectScheduleList" resultType="com.seojin.batch.biz.scheduler.ScheduleCronTrigger">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.selectScheduleList */
+
+		SELECT QJD.SCHED_NAME, QJD.JOB_NAME, QJD.JOB_GROUP, QJD.DESCRIPTION
+		, QJDE.PARAMETERS, QJDE.IS_NOTIFICATION, QJDE.NOTIFICATION_RECIPIENT, QJDE.RGSTER_NO, QJDE.RGST_DTM
+		, QT.PREV_FIRE_TIME, QT.NEXT_FIRE_TIME, QT.TRIGGER_STATE, QT.JOB_DATA
+		, QCT.CRON_EXPRESSION, IF(QT.TRIGGER_STATE='PAUSED', 0, 1) AS JOB_STATE
+		FROM QRTZ_JOB_DETAILS QJD
+		JOIN QRTZ_JOB_DETAILS_EXT QJDE
+		ON ( QJD.SCHED_NAME = QJDE.SCHED_NAME AND QJD.JOB_NAME = QJDE.JOB_NAME AND QJD.JOB_GROUP = QJDE.JOB_GROUP)
+		JOIN QRTZ_TRIGGERS QT
+		ON ( QJD.SCHED_NAME = QT.SCHED_NAME AND QJD.JOB_NAME = QT.JOB_NAME AND QJD.JOB_GROUP = QT.JOB_GROUP )
+		JOIN QRTZ_CRON_TRIGGERS QCT
+		ON ( QT.SCHED_NAME = QCT.SCHED_NAME AND QT.TRIGGER_NAME = QCT.TRIGGER_NAME AND QT.TRIGGER_GROUP = QCT.TRIGGER_GROUP )
+		<where>
+			<if test="jobGroup != null and jobGroup != ''">
+				AND QJD.JOB_GROUP = #{jobGroup}
+			</if>
+			<if test="jobName != null and jobName != ''">
+				AND QJD.JOB_NAME LIKE CONCAT('%', #{jobName, jdbcType=VARCHAR}, '%')
+			</if>
+		</where>
+		ORDER BY QJD.JOB_GROUP, QJD.JOB_NAME
+		LIMIT #{rowsPerPage} OFFSET #{start}
+
+	</select>
+
+	<select id="selectSchedule" resultType="com.seojin.batch.biz.scheduler.ScheduleCronTrigger">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.selectSchedule */
+
+		SELECT QJD.SCHED_NAME, QJD.JOB_NAME, QJD.JOB_GROUP, QJD.DESCRIPTION
+			 , QJDE.PARAMETERS, QJDE.IS_NOTIFICATION, QJDE.NOTIFICATION_RECIPIENT, QJDE.START_DTM, QJDE.END_DTM, QJDE.RGSTER_NO, QJDE.RGST_DTM, QJDE.MODER_NO, QJDE.MOD_DTM
+			 , QT.PREV_FIRE_TIME, QT.NEXT_FIRE_TIME, QT.TRIGGER_STATE, QT.JOB_DATA
+			 , QCT.CRON_EXPRESSION
+		FROM QRTZ_JOB_DETAILS QJD
+				 JOIN QRTZ_JOB_DETAILS_EXT QJDE
+					  ON ( QJD.SCHED_NAME = QJDE.SCHED_NAME AND QJD.JOB_NAME = QJDE.JOB_NAME AND QJD.JOB_GROUP = QJDE.JOB_GROUP)
+				 JOIN QRTZ_TRIGGERS QT
+					  ON ( QJD.SCHED_NAME = QT.SCHED_NAME AND QJD.JOB_NAME = QT.JOB_NAME AND QJD.JOB_GROUP = QT.JOB_GROUP )
+				 JOIN QRTZ_CRON_TRIGGERS QCT
+					  ON ( QT.SCHED_NAME = QCT.SCHED_NAME AND QT.TRIGGER_NAME = QCT.TRIGGER_NAME AND QT.TRIGGER_GROUP = QCT.TRIGGER_GROUP )
+		WHERE QJD.SCHED_NAME	= #{schedName, 	jdbcType=VARCHAR}
+		  AND QJD.JOB_GROUP 	= #{jobGroup, 	jdbcType=VARCHAR}
+		  AND QJD.JOB_NAME 	= #{jobName, 	jdbcType=VARCHAR}
+
+	</select>
+
+	<insert id="insertJobDetailsExtend">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.insertJobDetailsExtend  */
+
+		INSERT INTO QRTZ_JOB_DETAILS_EXT (
+			SCHED_NAME,
+			JOB_NAME,
+			JOB_GROUP,
+			PARAMETERS,
+			IS_NOTIFICATION,
+			NOTIFICATION_RECIPIENT,
+			START_DTM,
+			END_DTM,
+			RGSTER_NO,
+			RGST_DTM,
+			MODER_NO,
+			MOD_DTM
+		) VALUES (
+					 #{schedName, jdbcType=VARCHAR},
+					 #{jobName, jdbcType=VARCHAR},
+					 #{jobGroup, jdbcType=VARCHAR},
+					 #{parameters, jdbcType=VARCHAR},
+					 #{isNotification, jdbcType=VARCHAR},
+					 #{notificationRecipient, jdbcType=VARCHAR},
+					 #{startDtm, jdbcType=TIMESTAMP},
+					 #{endDtm, jdbcType=TIMESTAMP},
+					 #{rgsterNo, jdbcType=VARCHAR},
+					 NOW(),
+					 #{moderNo, jdbcType=VARCHAR},
+					 NOW()
+				 )
+
+	</insert>
+
+	<update id="updateJobDetailsExtend">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.updateJobDetailsExtend */
+
+		UPDATE QRTZ_JOB_DETAILS_EXT
+		SET PARAMETERS 				= #{parameters, jdbcType=VARCHAR},
+			IS_NOTIFICATION 		= #{isNotification, jdbcType=VARCHAR},
+			NOTIFICATION_RECIPIENT 	= #{notificationRecipient, jdbcType=VARCHAR},
+			START_DTM 				= #{startDtm, jdbcType=TIMESTAMP},
+			END_DTM					= #{endDtm, jdbcType=TIMESTAMP},
+			MODER_NO 				= #{moderNo, jdbcType=VARCHAR},
+			MOD_DTM 				= NOW()
+		WHERE SCHED_NAME 	= #{schedName, jdbcType=VARCHAR}
+		  AND JOB_NAME 	= #{jobName, jdbcType=VARCHAR}
+		  AND JOB_GROUP 	= #{jobGroup, jdbcType=VARCHAR}
+	</update>
+
+	<delete id="deleteJobDetailsExtend">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.deleteJobDetailsExtend */
+
+		DELETE FROM QRTZ_JOB_DETAILS_EXT
+		WHERE SCHED_NAME 	= #{schedName, jdbcType=VARCHAR}
+		  AND JOB_NAME 	= #{jobName, jdbcType=VARCHAR}
+		  AND JOB_GROUP 	= #{jobGroup, jdbcType=VARCHAR}
+	</delete>
+
+	<select id="selectScheduleLogCount" resultType="int">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.selectScheduleLogCount */
+
+		SELECT COUNT(1)
+		FROM QRTZ_TRIGGERS_EXECUTION_EXT QTE
+		WHERE QTE.JOB_NAME  = #{jobName, jdbcType=VARCHAR}
+		  AND QTE.JOB_GROUP = #{jobGroup, jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectScheduleLog" resultType="com.seojin.batch.biz.scheduler.TriggerExecution">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.selectScheduleLog */
+
+		SELECT QTE.TRIGGERS_EXECUTION_ID,
+			   QTE.JOB_EXECUTION_ID,
+			   QTE.SCHED_NAME,
+			   QTE.JOB_NAME,
+			   QTE.JOB_GROUP,
+			   QTE.TRIGGER_NAME,
+			   QTE.TRIGGER_GROUP,
+			   QTE.TRIGGER_TYPE,
+			   QTE.COMMAND,
+			   QTE.EXECUTOR,
+			   QTE.EXIT_CODE,
+			   QTE.EXIT_MESSAGE,
+			   QTE.START_TIME,
+			   QTE.END_TIME
+		FROM QRTZ_TRIGGERS_EXECUTION_EXT QTE
+		WHERE QTE.JOB_NAME = #{jobName, jdbcType=VARCHAR}
+		  AND QTE.JOB_GROUP = #{jobGroup, jdbcType=VARCHAR}
+		ORDER BY QTE.TRIGGERS_EXECUTION_ID DESC
+			LIMIT #{rowsPerPage} OFFSET #{start}
+	</select>
+
+	<select id="selectBatchJobLogCount" resultType="int">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.selectBatchJobLogCount */
+
+		SELECT COUNT(1)
+		FROM SY_BATCH_JOB_INSTANCE BJI
+				 LEFT OUTER JOIN SY_BATCH_JOB_EXECUTION BJE
+								 ON BJI.JOB_INSTANCE_ID = BJE.JOB_INSTANCE_ID
+		WHERE BJI.JOB_NAME = #{jobName, jdbcType=VARCHAR}
+		  AND BJE.JOB_EXECUTION_ID = #{jobExecutionId, jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectBatchJobLog" resultType="com.seojin.batch.biz.scheduler.JobExecution">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.selectBatchJobLog */
+
+		SELECT BJI.JOB_INSTANCE_ID,
+			   BJI.VERSION,
+			   BJI.JOB_NAME,
+			   BJI.JOB_KEY,
+			   BJE.JOB_EXECUTION_ID,
+			   BJE.VERSION,
+			   BJE.JOB_INSTANCE_ID as BJE_JOB_INSTANCE_ID,
+			   BJE.CREATE_TIME,
+			   BJE.START_TIME,
+			   BJE.END_TIME,
+			   BJE.STATUS,
+			   BJE.EXIT_CODE,
+			   BJE.EXIT_MESSAGE,
+			   BJE.LAST_UPDATED,
+			   BJE.JOB_CONFIGURATION_LOCATION
+		FROM SY_BATCH_JOB_INSTANCE BJI
+				 LEFT OUTER JOIN SY_BATCH_JOB_EXECUTION BJE
+								 ON BJI.JOB_INSTANCE_ID = BJE.JOB_INSTANCE_ID
+		WHERE BJI.JOB_NAME = #{jobName, jdbcType=VARCHAR}
+		  AND BJE.JOB_EXECUTION_ID = #{jobExecutionId, jdbcType=VARCHAR}
+		ORDER BY BJI.JOB_INSTANCE_ID DESC
+			LIMIT #{rowsPerPage} OFFSET #{start}
+	</select>
+
+	<select id="selectBatchStepLogCount" resultType="int">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.selectBatchStepLogCount */
+
+		SELECT COUNT(1)
+		FROM SY_BATCH_JOB_EXECUTION BJE
+				 LEFT OUTER JOIN SY_BATCH_STEP_EXECUTION BSE
+								 ON BJE.JOB_EXECUTION_ID = BSE.JOB_EXECUTION_ID
+		WHERE BJE.JOB_EXECUTION_ID = #{jobExecutionId, jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectBatchStepLog" resultType="com.seojin.batch.biz.scheduler.StepExecution">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.selectBatchStepLog */
+
+		SELECT BJE.JOB_EXECUTION_ID,
+			   BJE.VERSION,
+			   BJE.JOB_INSTANCE_ID as BJE_JOB_INSTANCE_ID,
+			   BJE.CREATE_TIME,
+			   BJE.START_TIME,
+			   BJE.END_TIME,
+			   BJE.STATUS,
+			   BJE.EXIT_CODE,
+			   BJE.EXIT_MESSAGE,
+			   BJE.LAST_UPDATED,
+			   BJE.JOB_CONFIGURATION_LOCATION,
+			   BSE.STEP_EXECUTION_ID,
+			   BSE.VERSION,
+			   BSE.STEP_NAME,
+			   BSE.JOB_EXECUTION_ID as BSE_JOB_EXECUTION_ID,
+			   BSE.START_TIME,
+			   BSE.END_TIME,
+			   BSE.STATUS,
+			   BSE.COMMIT_COUNT,
+			   BSE.READ_COUNT,
+			   BSE.FILTER_COUNT,
+			   BSE.WRITE_COUNT,
+			   BSE.READ_SKIP_COUNT,
+			   BSE.WRITE_SKIP_COUNT,
+			   BSE.PROCESS_SKIP_COUNT,
+			   BSE.ROLLBACK_COUNT,
+			   BSE.EXIT_CODE,
+			   BSE.EXIT_MESSAGE,
+			   BSE.LAST_UPDATED
+		FROM SY_BATCH_JOB_EXECUTION BJE
+				 LEFT OUTER JOIN SY_BATCH_STEP_EXECUTION BSE
+								 ON BJE.JOB_EXECUTION_ID = BSE.JOB_EXECUTION_ID
+		WHERE BJE.JOB_EXECUTION_ID = #{jobExecutionId, jdbcType=VARCHAR}
+		ORDER BY BJE.JOB_EXECUTION_ID DESC
+	</select>
+
+	<insert id="insertTriggerExecution" useGeneratedKeys="true" keyProperty="triggersExecutionId">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.insertTriggerExecution  */
+
+		INSERT INTO QRTZ_TRIGGERS_EXECUTION_EXT (
+			SCHED_NAME,
+			JOB_NAME,
+			JOB_GROUP,
+			TRIGGER_NAME,
+			TRIGGER_GROUP,
+			TRIGGER_TYPE,
+			COMMAND,
+			PARAMETERS,
+			EXECUTOR,
+			EXIT_CODE,
+			EXIT_MESSAGE,
+			START_TIME,
+			END_TIME
+		) VALUES (
+					 #{schedName, 	jdbcType=VARCHAR},
+					 #{jobName, 		jdbcType=VARCHAR},
+					 #{jobGroup, 	jdbcType=VARCHAR},
+					 #{triggerName, 	jdbcType=VARCHAR},
+					 #{triggerGroup, jdbcType=VARCHAR},
+					 #{triggerType, 	jdbcType=VARCHAR},
+					 #{command, 		jdbcType=VARCHAR},
+					 #{parameters, 	jdbcType=VARCHAR},
+					 #{executor, 	jdbcType=VARCHAR},
+					 #{exitCode, 	jdbcType=VARCHAR},
+					 #{exitMessage, 	jdbcType=VARCHAR},
+					 #{startTime, 	jdbcType=TIMESTAMP},
+					 #{endTime, 		jdbcType=TIMESTAMP}
+				 )
+	</insert>
+
+	<update id="updateTriggerExecution">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.updateTriggerExecution  */
+
+		UPDATE QRTZ_TRIGGERS_EXECUTION_EXT
+		SET EXIT_CODE = #{exitCode, jdbcType=VARCHAR}
+		  , EXIT_MESSAGE = #{exitMessage, jdbcType=VARCHAR}
+		WHERE TRIGGERS_EXECUTION_ID = #{triggersExecutionId, jdbcType=BIGINT}
+	</update>
+
+	<delete id="deleteTriggerExecution">
+		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.deleteTriggerExecution  */
+
+		DELETE FROM QRTZ_TRIGGERS_EXECUTION_EXT QTEE
+		WHERE QTEE.JOB_NAME  = #{jobName, jdbcType=VARCHAR}
+		  AND QTEE.JOB_GROUP = #{jobGroup, jdbcType=VARCHAR}
+	</delete>
+</mapper>
