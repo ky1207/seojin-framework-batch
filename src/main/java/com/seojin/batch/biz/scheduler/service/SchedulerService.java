@@ -3,7 +3,7 @@ package com.seojin.batch.biz.scheduler.service;
 import com.seojin.batch.biz.scheduler.*;
 import com.seojin.batch.biz.scheduler.mapper.SchedulerMapper;
 import com.seojin.batch.sys.constant.Const;
-import com.seojin.batch.sys.job.SpringBatchShellExecutorJob;
+import com.seojin.batch.sys.executor.BatchExecutorJob;
 import com.seojin.batch.sys.listener.CommonLogTriggerListener;
 import com.seojin.commons.grid.Grid;
 import lombok.extern.slf4j.Slf4j;
@@ -294,7 +294,7 @@ public class SchedulerService {
     }
 
     private JobDetail createJobDetail(ScheduleParam scheduleParam) {
-        return JobBuilder.newJob(SpringBatchShellExecutorJob.class)
+        return JobBuilder.newJob(BatchExecutorJob.class)
                 .withIdentity(scheduleParam.getJobName(), scheduleParam.getJobGroup())
                 .withDescription(scheduleParam.getDescription())
                 .build();
