@@ -1,4 +1,4 @@
-package com.seojin.batch.sys.job;
+package com.seojin.batch.sys.executor;
 
 import com.seojin.batch.biz.scheduler.TriggerExecution;
 import com.seojin.batch.biz.scheduler.service.SchedulerService;
@@ -29,7 +29,7 @@ import java.util.Date;
  */
 @DisallowConcurrentExecution
 @Slf4j
-public class SpringBatchShellExecutorJob extends QuartzJobBean {
+public class BatchExecutorJob extends QuartzJobBean {
     /**
      * ApplicationContext
      */
