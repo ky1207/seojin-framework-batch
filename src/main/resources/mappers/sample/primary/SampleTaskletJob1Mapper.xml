@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seojin.batch.biz.sample.tasklet.SampleTaskletJob1Mapper">
+	
+	<select id="selectBatchSample" resultType="com.seojin.batch.biz.sample.tasklet.SampleTaskletJob1">
+		/* com.seojin.batch.biz.sample.tasklet.SampleTaskletJob1Mapper.selectBatchSample */
+	
+		SELECT DTL_NO, DTL_DESC, SORT_SEQ, USE_YN, RGSTER_NO, RGST_DTM
+		  FROM BATCH_SAMPLE
+		 ORDER BY SORT_SEQ		  	
+	</select>
+
+	<update id="updateBatchSample" parameterType="com.seojin.batch.biz.sample.tasklet.SampleTaskletJob1">
+		/* com.seojin.batch.biz.sample.tasklet.SampleTaskletJob1Mapper.updateBatchSample */
+
+		UPDATE BATCH_SAMPLE
+		   SET USE_YN   = #{useYn,	jdbcType=VARCHAR}
+		 WHERE DTL_NO   = #{dtlNo,	jdbcType=VARCHAR}
+	</update>	
+
+</mapper>
