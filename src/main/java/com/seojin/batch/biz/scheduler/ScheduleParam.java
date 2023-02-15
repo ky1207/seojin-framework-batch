@@ -66,19 +66,19 @@ public class ScheduleParam extends Paging {
 	private String useYn;
 
 	/**
-	 * rgsterNo
+	 * regUserId
 	 */
-	private String rgsterNo;
+	private String regUserId;
 
 	/**
 	 * lastUpdated
 	 */
-	private Date rgstDtm;
+	private Date regDtm;
 
 	/**
-	 * rgsterNo
+	 * modUserId
 	 */
-	private String moderNo;
+	private String modUserId;
 
 	/**
 	 * lastUpdated
