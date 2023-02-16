@@ -76,18 +76,18 @@ public class ScheduleCronTrigger extends BaseBean {
 	private String useYn;
 
 	/**
-	 * rgsterNo
+	 * regUserId
 	 */
-	private String rgsterNo;
+	private String regUserId;
 	/**
-	 * moderNo
+	 * modUserId
 	 */
-	private String moderNo;
+	private String modUserId;
 
 	/**
-	 * rgstDtm
+	 * regDtm
 	 */
-	private Date rgstDtm;
+	private Date regDtm;
 	/**
 	 * modDtm
 	 */
