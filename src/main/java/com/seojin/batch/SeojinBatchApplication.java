@@ -1,16 +1,12 @@
 package com.seojin.batch;
 
+import com.seojin.batch.sys.database.annotation.EnableBatchDataSource;
 import com.seojin.commons.annotations.EnableSeojinRestApplication;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Import;
-
-import com.seojin.batch.sys.database.annotation.EnableBatchDataSource;
-import com.seojin.commons.security.JasyptConfig;
 
 /**
  * Description : Batch API Service
