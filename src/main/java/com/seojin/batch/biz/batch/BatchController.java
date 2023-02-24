@@ -37,8 +37,12 @@ public class BatchController extends BaseJobController {
 	/**
 	 * ApplicationContext
 	 */
-	@Autowired
 	private ApplicationContext context;
+
+	@Autowired
+	public void setContext(ApplicationContext context) {
+		this.context = context;
+	}
 
 	/**
 	 * Description : Batch Job Main Launch

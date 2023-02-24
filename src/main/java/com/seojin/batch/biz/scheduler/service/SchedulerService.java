@@ -35,14 +35,22 @@ public class SchedulerService {
     /**
      * schedulerMapper
      */
-    @Autowired
     private SchedulerMapper schedulerMapper;
 
     /**
      * schedulerFactoryBean
      */
-    @Autowired
     private SchedulerFactoryBean schedulerFactoryBean;
+
+    @Autowired
+    public void setSchedulerMapper(SchedulerMapper schedulerMapper) {
+        this.schedulerMapper = schedulerMapper;
+    }
+
+    @Autowired
+    public void setSchedulerFactoryBean(SchedulerFactoryBean schedulerFactoryBean) {
+        this.schedulerFactoryBean = schedulerFactoryBean;
+    }
 
     /**
      * initScheduler

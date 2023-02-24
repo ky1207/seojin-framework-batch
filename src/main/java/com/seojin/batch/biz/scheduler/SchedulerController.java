@@ -27,8 +27,12 @@ public class SchedulerController extends BaseRestController {
 	/**
 	 * SchedulerService
 	 */
-	@Autowired
 	private SchedulerService schedulerService;
+
+	@Autowired
+	public void setSchedulerService(SchedulerService schedulerService) {
+		this.schedulerService = schedulerService;
+	}
 
 	/**
 	 * Description : Schedules List 검색

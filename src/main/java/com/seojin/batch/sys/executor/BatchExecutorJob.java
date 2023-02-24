@@ -33,20 +33,32 @@ public class BatchExecutorJob extends QuartzJobBean {
     /**
      * ApplicationContext
      */
-    @Autowired
     private ApplicationContext appContext;
 
     /**
      * jobLauncher
      */
-    @Autowired
     public JobLauncher jobLauncher;
 
     /**
      * SchedulerService
      */
-    @Autowired
     private SchedulerService schedulerService;
+
+    @Autowired
+    public void setAppContext(ApplicationContext appContext) {
+        this.appContext = appContext;
+    }
+
+    @Autowired
+    public void setJobLauncher(JobLauncher jobLauncher) {
+        this.jobLauncher = jobLauncher;
+    }
+
+    @Autowired
+    public void setSchedulerService(SchedulerService schedulerService) {
+        this.schedulerService = schedulerService;
+    }
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {

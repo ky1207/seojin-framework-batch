@@ -20,8 +20,12 @@ public class BatchService {
 	/**
 	 * CommonLogMapper
 	 */
-	@Autowired
 	private BatchMapper batchMapper;
+
+	@Autowired
+	public void setBatchMapper(BatchMapper batchMapper) {
+		this.batchMapper = batchMapper;
+	}
 
 	/**
 	 * QRTZ_TRIGGERS_EXECUTION_EXT table에 triggersExecutionId를 update하는

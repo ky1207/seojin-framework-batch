@@ -35,8 +35,13 @@ import lombok.extern.slf4j.Slf4j;
 public class PrimaryBatchDatasourceConfig {
 
 	
-	@Autowired
 	private ApplicationContext context;
+
+	@Autowired
+	public void setContext(ApplicationContext context) {
+		this.context = context;
+	}
+
 	/**
 	 * Description : dataSource 빈 구성
 	 * <p>
