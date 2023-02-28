@@ -71,6 +71,7 @@ public class BatchExecutorJob extends QuartzJobBean {
             String executionId = triggerExecution.getTriggersExecutionId().toString();
             String parameters = context.getTrigger().getJobDataMap().getString(Const.SCHEDULE_PARAMS);
 
+            try{
             Job job =  appContext.getBean(jobName, Job.class);
 
             JobParametersBuilder jobParamsBuilder = new JobParametersBuilder();
@@ -79,7 +80,7 @@ public class BatchExecutorJob extends QuartzJobBean {
 
             JobParameters jobParams = jobParamsBuilder.toJobParameters();
 
-            try {
+
                 JobExecution jobExecution = jobLauncher.run( job, jobParams);
 
                 if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
