@@ -114,8 +114,8 @@ public class SchedulerController extends BaseRestController {
 	 * @throws SchedulerException
 	 */
 	@PostMapping("/simple")
-	public void inputSimpleSchedule(@RequestBody ScheduleParam scheduleParam) throws SchedulerException {
-		schedulerService.inputSimpleSchedule(scheduleParam);
+	public void executeSimpleSchedule(@RequestBody ScheduleParam scheduleParam) throws SchedulerException {
+		schedulerService.executeSimpleSchedule(scheduleParam);
 	}
 
 	/**

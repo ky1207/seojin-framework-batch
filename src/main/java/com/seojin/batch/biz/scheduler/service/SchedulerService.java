@@ -176,7 +176,7 @@ public class SchedulerService {
      * @param scheduleParam
      * @throws SchedulerException
      */
-    public void inputSimpleSchedule(ScheduleParam scheduleParam) throws SchedulerException {
+    public void executeSimpleSchedule(ScheduleParam scheduleParam) throws SchedulerException {
         JobKey jobKey = getJobKey(scheduleParam);
         SimpleTrigger simpleTrigger = createSimpleTriggerForJob(scheduleParam);
         addTriggerListener(simpleTrigger.getKey());
@@ -184,11 +184,13 @@ public class SchedulerService {
 
         scheduler.getTriggersOfJob(jobKey).forEach(trigger -> {
             if (trigger instanceof SimpleTriggerImpl) {
+
                 try {
                     scheduler.resumeTrigger(trigger.getKey());
                 } catch (SchedulerException e) {
-                    log.error("execute trigger failed::{}", e);
+                    throw new RuntimeException(e);
                 }
+
             }
         });
     }

@@ -296,8 +296,8 @@
 	<delete id="deleteTriggerExecution">
 		/*+ com.seojin.batch.biz.scheduler.mapper.SchedulerMapper.deleteTriggerExecution  */
 
-		DELETE FROM QRTZ_TRIGGERS_EXECUTION_EXT QTEE
-		WHERE QTEE.JOB_NAME  = #{jobName, jdbcType=VARCHAR}
-		  AND QTEE.JOB_GROUP = #{jobGroup, jdbcType=VARCHAR}
+		DELETE FROM QRTZ_TRIGGERS_EXECUTION_EXT
+		WHERE JOB_NAME  = #{jobName, jdbcType=VARCHAR}
+		  AND JOB_GROUP = #{jobGroup, jdbcType=VARCHAR}
 	</delete>
 </mapper>
