@@ -84,10 +84,8 @@ public class SampleChunkJob2Config extends BaseAbstractJob {
 				.processor(itemProcessor())
 				.writer(myBatisBatchItemWriter())
 				.faultTolerant() //오류 허용을 위한 설정을 추가한다.
-				.skipLimit(2) //허용할 오류 횟수를 지정한다.
 				.skip(Exception.class) //오류로 처리할 대상 Exception을 지정한다.
-				.retryLimit(2)
-				.retry(Exception.class)
+				.skipLimit(2) //허용할 오류 횟수를 지정한다.
 				.build();
 	}
 
