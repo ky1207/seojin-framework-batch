@@ -169,9 +169,9 @@ CREATE TABLE `QRTZ_JOB_DETAILS_EXT` (
            `NOTIFICATION_RECIPIENT` varchar(500) DEFAULT NULL COMMENT '알림수신자',
            `START_DTM` datetime DEFAULT NULL COMMENT '시작일시',
            `END_DTM` datetime DEFAULT NULL COMMENT '종료일시',
-           `RGS_USER_ID` varchar(12) DEFAULT NULL COMMENT '등록자',
+           `REG_USER_ID` varchar(12) DEFAULT NULL COMMENT '등록자',
            `REG_DTM` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '등록일시',
-           `MOD_USER_NO` varchar(12)  DEFAULT NULL COMMENT '수정자',
+           `MOD_USER_ID` varchar(12)  DEFAULT NULL COMMENT '수정자',
            `MOD_DTM` datetime DEFAULT NULL COMMENT '수정일시',
            PRIMARY KEY (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
